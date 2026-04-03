@@ -1,0 +1,208 @@
+# 기본 설정
+esphome:
+  name: samsung-ac
+  friendly_name: Air-con
+
+# 칩셋과 보드 설정 - M5STACK-atom
+esp32:
+  board: m5stack-atom
+# 웹 인터페이스 생성
+web_server:
+  port: 80
+# 로깅 활성화
+logger:
+  logs:
+    component: ERROR # "Your component takes too long to respond" 경고 제거
+# Home Assistant API 활성화
+api:
+# OTA 활성화
+ota:
+  platform: esphome
+# WiFi 설정
+wifi:
+  ssid: "와이파이 ssid 입력"
+  password: "와이파이 비밀번호 입력"  
+captive_portal:
+
+# RS485 보드와 통신하기 위한 UART 핀 설정 자신의 ESP32에 맞는 GPIO 입력
+# tx & rx 반대로 입력해야 함 ( ESP32에서 수신이면 기기에서는 송신 )
+uart:
+  tx_pin: GPIO19
+  rx_pin: GPIO22
+  baud_rate: 9600
+  parity: EVEN
+
+# 삼성 에어컨 설정
+# GitHub에서 외부 컴포넌트 불러오기
+external_components:
+  - source: github://omerfaruk-aran/esphome_samsung_hvac_bus@main
+    components: [samsung_ac]
+
+samsung_ac:
+
+  # NonNASA 장치의 경우, 유휴 상태에서도 절전 모드 진입을 방지
+  non_nasa_keepalive: true
+  
+  # 디버깅 로그 설정
+  debug_log_undefined_messages: false
+  debug_log_messages: false
+
+  devices:
+    # 거실 에어컨
+    - address: "20.00.00"
+      capabilities:
+        horizontal_swing: true  # 좌우 풍향 제어 가능
+        vertical_swing: true   # 상하 풍향 제어 가능
+        # Presets 정의 : sleep, quiet, fast, longreach, windfree, eco
+        presets:
+          windfree:
+            name: "무풍"
+            enabled: true
+          longreach:
+            name: "롱바람"
+            enabled: true
+          fast:
+            name: "스피드"
+            enabled: true
+          quiet:
+            name: "정음"
+            enabled: true
+
+      climate:
+        name: "Living-AC"
+
+      # 추가 센서/스위치 (필요 시 사용)
+      room_temperature:
+        name: "Living-AC temperature"
+      target_temperature:
+        name: "Living-AC target temperature"
+      power:
+        name: "Living-AC power"
+      mode:
+        name: "Living-AC mode"
+      automatic_cleaning:
+        name: "Living-AC automatic clean"
+      room_temperature_offset: 0  # 현재온도 보정
+
+    # Room1 에어컨
+    - address: "20.00.01"
+      capabilities:
+        horizontal_swing: true  # 좌우 풍향 제어 가능
+        vertical_swing: true   # 상하 풍향 제어 가능
+        # Presets 정의 : sleep, quiet, fast, longreach, windfree, eco
+        presets:
+          windfree:
+            name: "무풍"
+            enabled: true
+          longreach:
+            name: "롱바람"
+            enabled: true
+          fast:
+            name: "스피드"
+            enabled: true
+          quiet:
+            name: "정음"
+            enabled: true
+
+      climate:
+        name: "Room1-AC"
+
+      # 추가 센서/스위치 (필요 시 사용)
+      room_temperature:
+        name: "Room1-AC temperature"
+      target_temperature:
+        name: "Room1-AC target temperature"
+      power:
+        name: "Room1-AC power"
+      mode:
+        name: "Room1-AC mode"
+      automatic_cleaning:
+        name: "Room1-AC automatic clean"
+      room_temperature_offset: 0  # 현재온도 보정
+
+    # Room2 에어컨
+    - address: "20.00.02"
+      capabilities:
+        horizontal_swing: true  # 좌우 풍향 제어 가능
+        vertical_swing: true   # 상하 풍향 제어 가능
+        # Presets 정의 : sleep, quiet, fast, longreach, windfree, eco
+        presets:
+          windfree:
+            name: "무풍"
+            enabled: true
+          longreach:
+            name: "롱바람"
+            enabled: true
+          fast:
+            name: "스피드"
+            enabled: true
+          quiet:
+            name: "정음"
+            enabled: true
+
+      climate:
+        name: "Room2-AC"
+
+      # 추가 센서/스위치 (필요 시 사용)
+      room_temperature:
+        name: "Room2-AC temperature"
+      target_temperature:
+        name: "Room2-AC target temperature"
+      power:
+        name: "Room2-AC power"
+      mode:
+        name: "Room2-AC mode"
+      automatic_cleaning:
+        name: "Room2-AC automatic clean"
+      room_temperature_offset: 0  # 현재온도 보정
+
+    # Room3 에어컨
+    - address: "20.00.03"
+      capabilities:
+        horizontal_swing: true  # 좌우 풍향 제어 가능
+        vertical_swing: true   # 상하 풍향 제어 가능
+        # Presets 정의 : sleep, quiet, fast, longreach, windfree, eco
+        presets:
+          windfree:
+            name: "무풍"
+            enabled: true
+          longreach:
+            name: "롱바람"
+            enabled: true
+          fast:
+            name: "스피드"
+            enabled: true
+          quiet:
+            name: "정음"
+            enabled: true
+
+      climate:
+        name: "Room3-AC"
+
+      # 추가 센서/스위치 (필요 시 사용)
+      room_temperature:
+        name: "Room3-AC temperature"
+      target_temperature:
+        name: "Room3-AC target temperature"
+      power:
+        name: "Room3-AC power"
+      mode:
+        name: "Room3-AC mode"
+      automatic_cleaning:
+        name: "Room3-AC automatic clean"
+      room_temperature_offset: 0  # 현재온도 보정
+
+    # 실외기
+    - address: "10.00.00"
+      error_code:
+        name: error_code
+      outdoor_instantaneous_power:
+        name: "Outdoor Instantaneous Power"
+      outdoor_cumulative_energy:
+        name: "Outdoor Cumulative Energy"
+      outdoor_current:
+        name: "Outdoor Current"
+      outdoor_voltage:
+        name: "Outdoor Voltage"
+      outdoor_temperature: 
+        name: "Outdoor temperature"
